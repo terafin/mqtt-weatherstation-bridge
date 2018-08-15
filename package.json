@@ -1,0 +1,22 @@
+{
+    "name": "mqtt-weatherstation-bridge",
+    "version": "0.0.1",
+    "description": "WeatherLinkIP to MQTT",
+    "license": "MIT",
+    "main": "mqtt-weatherstation-bridge.js",
+    "repository": {
+        "url": "https://github.com/terafin/mqtt-weatherstation-bridge"
+    },
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "homeautomation-js-lib": "git://github.com/terafin/homeautomation-js-lib.git",
+        "lodash": "latest",
+        "mqtt": "latest",
+        "davis-weather": "latest"
+    },
+    "engines": {
+        "node": ">=4"
+    }
+}
