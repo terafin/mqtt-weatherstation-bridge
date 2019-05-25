@@ -4,8 +4,7 @@ const _ = require('lodash')
 const repeat = require('repeat')
 const logging = require('homeautomation-js-lib/logging.js')
 const Davis = require('davis-weather')
-
-require('homeautomation-js-lib/mqtt_helpers.js')
+const mqtt_helpers = require('homeautomation-js-lib/mqtt_helpers.js')
 
 // Config
 const topic_prefix = process.env.TOPIC_PREFIX
@@ -13,7 +12,7 @@ const weatherstationIP = process.env.DAVIS_IP
 var weatherstationPort = process.env.DAVIS_PORT
 
 // Setup MQTT
-const client = mqtt.setupClient(null, null)
+const client = mqtt_helpers.setupClient(null, null)
 
 if (_.isNil(topic_prefix)) {
 	logging.warn('TOPIC_PREFIX not set, not starting')
