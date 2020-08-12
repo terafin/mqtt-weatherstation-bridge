@@ -68,6 +68,7 @@ const startMonitoring = function() {
     interval(async() => {
         check_measurements()
     }, 30 * 1000)
+    check_measurements()
 }
 
 startMonitoring()
