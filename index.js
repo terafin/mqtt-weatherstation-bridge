@@ -46,7 +46,7 @@ var davisClient = new Davis(weatherstationIP, weatherstationPort)
 
 const VALUES_FOR_RUNNING_AVERAGE = 8
 const MIN_VALUES_FOR_RUNNING_AVERAGE_THRESHOLD = 3
-const THRESHOLD_TO_THROW_AWAY = 20
+const THRESHOLD_TO_THROW_AWAY = 50
 const MAX_VALUES_TO_THROW_AWAY = 2
 
 const average_options = {
@@ -64,12 +64,11 @@ const check_measurements = function() {
         } else {
             Object.keys(data).forEach(measurement => {
                 const value = data[measurement]
-                if (!_.isNil(value)) {
-                    var stringValue = value.toString()
-                    if (stringValue != 'NaN') {
-                        utilities.add_running_average(measurement, value, average_options)
-                        client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), utilities.running_average(key))
-                    }
+                if (isNaN(value)) {
+                    client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), value)
+                } else {
+                    utilities.add_running_average(measurement, value, average_options)
+                    client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), utilities.running_average(measurement))
                 }
             })
         }
