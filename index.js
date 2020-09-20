@@ -43,19 +43,22 @@ if (!_.isNil(shouldRetain)) {
 
 var davisClient = new Davis(weatherstationIP, weatherstationPort)
 
-
-const VALUES_FOR_RUNNING_AVERAGE = 8
-const MIN_VALUES_FOR_RUNNING_AVERAGE_THRESHOLD = 3
-const THRESHOLD_TO_THROW_AWAY = 50
-const MAX_VALUES_TO_THROW_AWAY = 2
-
 const average_options = {
-    values_for_running_average: VALUES_FOR_RUNNING_AVERAGE,
-    min_values_for_running_average_threshold: MIN_VALUES_FOR_RUNNING_AVERAGE_THRESHOLD,
-    threshold_to_throw_away: THRESHOLD_TO_THROW_AWAY,
-    max_values_to_throw_away: MAX_VALUES_TO_THROW_AWAY
+    values_for_running_average: 8,
+    min_values_for_running_average_threshold: 3,
+    threshold_to_throw_away: 50,
+    max_values_to_throw_away: 2
 }
 
+const slow_moving_average_options = {
+    values_for_running_average: 10,
+    min_values_for_running_average_threshold: 3,
+    threshold_to_throw_away: 10,
+    max_values_to_throw_away: 3
+}
+
+const values_to_use_slow_running_average = ['outsideTemperature', 'outsideHumidity', 'insideHumidity', 'insideTemperature']
+const values_to_use_running_average = ['barometer']
 
 const check_measurements = function() {
     davisClient.getCurrentConditions(function(err, data) {
@@ -66,9 +69,14 @@ const check_measurements = function() {
                 const value = data[measurement]
                 if (isNaN(value)) {
                     client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), value)
-                } else {
+                } else if (values_to_use_slow_running_average.includes(measurement)) {
+                    utilities.add_running_average(measurement, value, slow_moving_average_options)
+                    client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), utilities.running_average(measurement))
+                } else if (values_to_use_running_average.includes(measurement)) {
                     utilities.add_running_average(measurement, value, average_options)
                     client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), utilities.running_average(measurement))
+                } else {
+                    client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), value)
                 }
             })
         }
