@@ -73,7 +73,9 @@ const check_measurements = function() {
                     utilities.add_running_average(measurement, value, slow_moving_average_options)
                     client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), utilities.running_average(measurement))
                 } else if (values_to_use_running_average.includes(measurement)) {
-                    utilities.add_running_average(measurement, value, average_options)
+                    if (value != 255) { // Occasionally temp and humidity report this
+                        utilities.add_running_average(measurement, value, average_options)
+                    }
                     client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), utilities.running_average(measurement))
                 } else {
                     client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, measurement), value)
