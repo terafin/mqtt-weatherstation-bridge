@@ -68,8 +68,7 @@ const slow_moving_average_options = {
     max_values_to_throw_away: 3
 }
 
-const values_to_use_slow_running_average = ['outsideTemperature', 'outsideHumidity', 'insideHumidity', 'insideTemperature']
-const values_to_use_running_average = ['barometer']
+const values_to_convert_to_c = ['wind_chill', 'temp', 'temp_in', 'dew_point', 'wet_bulb', 'heat_index', 'thw_index', 'thw_index', 'thsw_index']
 
 async function check_measurements() {
     const results = await query_station(weatherstationIP)
@@ -84,6 +83,16 @@ async function check_measurements() {
 
     results.conditions.forEach(condition_set => {
         client.smartPublishCollection(topic_prefix, condition_set, ['data_structure_type', 'lsid', 'txid'], mqttOptions)
+        Object.keys(condition_set).forEach(key => {
+            if (values_to_convert_to_c.includes(key)) {
+                value = condition_set[key]
+                if (!_.isNil(value)) {
+                    const celsius = (value - 32) * 5 / 9
+                    client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, key + '_c'), celsius.toFixed(1), mqttOptions)
+                }
+
+            }
+        })
     })
 }
 
