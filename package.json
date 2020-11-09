@@ -11,10 +11,10 @@
         "start": "node index.js"
     },
     "dependencies": {
-        "davis-weather": "latest",
         "homeautomation-js-lib": "https://github.com/terafin/homeautomation-js-lib.git",
         "lodash": "latest",
         "mqtt": "latest",
+        "got": "latest",
         "interval-promise": "latest"
     },
     "engines": {
