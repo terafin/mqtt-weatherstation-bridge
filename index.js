@@ -87,8 +87,8 @@ async function check_measurements() {
             if (values_to_convert_to_c.includes(key)) {
                 value = condition_set[key]
                 if (!_.isNil(value)) {
-                    const celsius = (value - 32) * 5 / 9
-                    client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, key + '_c'), celsius.toFixed(1), mqttOptions)
+                    const celsius = ((value - 32) * 5 / 9).toFixed(1)
+                    client.smartPublish(mqtt_helpers.generateTopic(topic_prefix, key + '_c'), celsius, mqttOptions)
                 }
 
             }
