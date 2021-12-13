@@ -4,6 +4,7 @@
     "description": "WeatherLinkIP to MQTT",
     "license": "MIT",
     "main": "mqtt-weatherstation-bridge.js",
+    "type": "module",
     "repository": {
         "url": "https://github.com/terafin/mqtt-weatherstation-bridge"
     },
@@ -15,9 +16,10 @@
         "lodash": "latest",
         "mqtt": "latest",
         "got": "latest",
-        "interval-promise": "latest"
+        "interval-promise": "latest",
+        "wunderground-pws": "https://github.com/terafin/wunderground-pws.git"
     },
     "engines": {
-        "node": ">=4"
+        "node": ">=10"
     }
 }
