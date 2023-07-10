@@ -15,7 +15,7 @@
         "homeautomation-js-lib": "https://github.com/terafin/homeautomation-js-lib.git",
         "lodash": "latest",
         "mqtt": "latest",
-        "got": "latest",
+        "got": "11.8.5",
         "interval-promise": "latest",
         "wunderground-pws": "https://github.com/terafin/wunderground-pws.git"
     },
